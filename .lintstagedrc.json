@@ -1,0 +1,6 @@
+{
+    "*.ts": ["xo --fix", "prettier --write"],
+    "*.{md,yaml,yml}": "prettier --write",
+    "!(package).json": "prettier --write",
+    "package.json": ["sort-package-json", "prettier --write"]
+}

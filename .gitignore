@@ -1,0 +1,15 @@
+# Developer environment
+.vscode
+.DS_STORE
+
+# Generated directories
+cdk.out
+node_modules
+dist
+volume
+
+# Ignore JavaScript
+*.js
+
+# Local config
+.env

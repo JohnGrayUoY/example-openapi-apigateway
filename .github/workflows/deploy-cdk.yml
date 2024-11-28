@@ -1,0 +1,54 @@
+name: Cdk deploy
+
+on:
+    push:
+        branches:
+            - main
+
+permissions:
+    id-token: write
+    contents: read
+    packages: read
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                environment: ['dev', 'staging', 'prod']
+
+        environment: ${{ matrix.environment }}
+
+        steps:
+            - name: Checkout branch
+              uses: actions/checkout@v4
+
+            - name: Setup node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  registry-url: https://npm.pkg.github.com/
+                  scope: '@university-of-york'
+                  always-auth: true
+                  cache: npm
+
+            - name: Install dependencies
+              run: npm ci
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Set environment variables
+              uses: university-of-york/ds-devtool-setEnvVars@v3
+              with:
+                  envFile: .env.${{ matrix.environment }}
+
+            - name: Create AWS authentication
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  role-to-assume: ${{ vars.DEPLOY_ROLE_ARN }}
+                  role-duration-seconds: 1800
+                  aws-region: eu-west-1
+
+            - name: Cdk deploy
+              run: npx cdk deploy --all --require-approval never

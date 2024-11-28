@@ -1,0 +1,17 @@
+{
+    "extends": "./tsconfig.node20+strictest.json",
+    "compilerOptions": {
+        "outDir": "dist",
+        "types": ["node", "vitest/globals"],
+
+        "sourceMap": true,
+        "inlineSources": true,
+
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
+
+        "exactOptionalPropertyTypes": false,
+        "noPropertyAccessFromIndexSignature": false
+    },
+    "exclude": ["cdk.out", "node_modules", "dist"]
+}

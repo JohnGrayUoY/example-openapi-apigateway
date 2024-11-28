@@ -1,0 +1,43 @@
+{
+    "name": "name-here",
+    "version": "1.0.0",
+    "description": "Description here",
+    "license": "ISC",
+    "author": "university-of-york/corporate-services",
+    "main": "index.ts",
+    "scripts": {
+        "build": "tsc",
+        "cdk": "cdk",
+        "fix-lint": "xo --fix",
+        "lint": "xo .",
+        "precommit": "lint-staged",
+        "prepare": "husky",
+        "test": "cross-env TZ=UTC DOTENV_CONFIG_PATH=.env.test vitest --passWithNoTests",
+        "test-coverage": "cross-env DOTENV_CONFIG_PATH=.env.test vitest --passWithNoTests --coverage",
+        "watch": "tsc -w"
+    },
+    "dependencies": {
+        "aws-cdk-lib": "^2.169.0",
+        "constructs": "^10.3.0",
+        "npm": "^10.8.2",
+        "source-map-support": "^0.5.21",
+        "zod": "^3.23.8"
+    },
+    "devDependencies": {
+        "@types/node": "^22.4.2",
+        "@university-of-york/esg-lib-snapshot-serializers": "^3.1.0",
+        "@vitest/coverage-istanbul": "^2.1.5",
+        "aws-cdk": "^2.169.0",
+        "cross-env": "^7.0.3",
+        "dotenv-safe": "^9.1.0",
+        "esbuild": "^0.24.0",
+        "husky": "^9.1.5",
+        "lint-staged": "^15.2.9",
+        "prettier": "^3.3.3",
+        "sort-package-json": "^2.10.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.5.4",
+        "vitest": "^2.1.5",
+        "xo": "^0.59.3"
+    }
+}

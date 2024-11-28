@@ -1,0 +1,45 @@
+{
+    "prettier": true,
+    "space": 4,
+    "envs": ["node"],
+    "rules": {
+        "camelcase": "off",
+        "capitalized-comments": "off",
+        "curly": "error",
+        "eqeqeq": ["error", "smart"],
+        "import/extensions": "off",
+        "max-params": ["error", { "max": 6 }],
+        "no-await-in-loop": "warn",
+        "no-new": "off",
+
+        "n/file-extension-in-import": "off",
+        "n/prefer-global/process": "off",
+
+        "unicorn/filename-case": "off",
+        "unicorn/no-null": "off",
+        "unicorn/prevent-abbreviations": "off",
+        "unicorn/numeric-separators-style": [
+            "error",
+            {
+                "onlyIfContainsSeparator": true,
+                "binary": {
+                    "onlyIfContainsSeparator": false
+                }
+            }
+        ],
+
+        "@typescript-eslint/array-type": [
+            2,
+            {
+                "default": "generic"
+            }
+        ],
+        "@typescript-eslint/ban-ts-comment": [
+            "error",
+            { "ts-expect-error": "allow-with-description" }
+        ],
+        "@typescript-eslint/consistent-type-definitions": "off",
+        "@typescript-eslint/naming-convention": "off",
+        "@typescript-eslint/restrict-template-expressions": "off"
+    }
+}
