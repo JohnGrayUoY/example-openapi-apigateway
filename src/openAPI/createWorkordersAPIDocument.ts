@@ -20,7 +20,7 @@ export const createWorkordersAPIDocument = (
             },
         ],
         paths: {
-            '/exampleGetWorkorders': {
+            '/workorders': {
                 get: {
                     description: 'Get workorders',
                     responses: {

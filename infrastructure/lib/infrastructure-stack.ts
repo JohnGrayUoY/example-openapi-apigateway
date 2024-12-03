@@ -2,7 +2,7 @@ import { Stack, type StackProps } from 'aws-cdk-lib';
 import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import type { Construct } from 'constructs';
-import { ApiDefinition, LambdaIntegration, SpecRestApi } from 'aws-cdk-lib/aws-apigateway';
+import { ApiDefinition, SpecRestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Effect, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { type Environment } from '../types/parseEnvironment';
 import { createWorkordersAPIDocument } from '../../src/openAPI/createWorkordersAPIDocument';
@@ -40,11 +40,8 @@ export class InfrastructureStack extends Stack {
             apiRoleArn: apiRole.roleArn,
         });
 
-        const api = new SpecRestApi(this, 'FinanceAPI', {
+        new SpecRestApi(this, 'FinanceAPI', {
             apiDefinition: ApiDefinition.fromInline(openAPIDocument),
         });
-
-        const getWorkordersResource = api.root.addResource('getWorkorders');
-        getWorkordersResource.addMethod('GET', new LambdaIntegration(getWorkordersLambda));
     }
 }
