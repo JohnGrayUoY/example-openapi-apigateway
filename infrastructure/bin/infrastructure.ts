@@ -2,8 +2,11 @@
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { ZodError } from 'zod';
+import dotenv from 'dotenv-safe';
 import { InfrastructureStack } from '../lib/infrastructure-stack';
 import { parseEnvironment } from '../types/parseEnvironment';
+
+dotenv.config({ path: '.env.test' });
 
 let env;
 
@@ -18,16 +21,16 @@ try {
 }
 
 const app = new cdk.App();
-new InfrastructureStack(app, 'app-name', env, {
+new InfrastructureStack(app, 'Example-OpenAPI-APIGateway', env, {
     tags: {
-        'york/name': 'Corporate Services Template Project',
+        'york/name': 'Example-OpenAPI-APIGateway',
         'york/group': 'ESG',
         'york/project': 'Software Development Standards',
         'york/status': env.STATUS,
         'york/pushed_by': 'github',
         'york/defined_in': 'cdk',
         'york/policy_version': '2',
-        'york/repo_name': 'ds-corporate-services-template',
+        'york/repo_name': 'example-openapi-apigateway',
         'york/team': 'corporate-services',
     },
 });

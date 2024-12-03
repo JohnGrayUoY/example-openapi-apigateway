@@ -2,6 +2,34 @@
 
 exports[`InfrastructureStack > should compile 1`] = `
 {
+  "Outputs": {
+    "FinanceAPIEndpoint48E49EBE": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "FinanceAPI24BBA5D4",
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region",
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+            {
+              "Ref": "FinanceAPIDeploymentStageprod417D1B6E",
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -10,9 +38,272 @@ exports[`InfrastructureStack > should compile 1`] = `
     },
   },
   "Resources": {
-    "Examplelambda47E37B98": {
+    "FinanceAPI24BBA5D4": {
+      "Properties": {
+        "Body": {
+          "info": {
+            "title": "Workorders API",
+            "version": "0.1.0",
+          },
+          "openapi": "3.1.0",
+          "paths": {
+            "/getWorkorders": {
+              "get": {
+                "description": "Get workorders",
+                "responses": {
+                  "200": {
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "properties": {
+                            "workorders": {
+                              "items": {
+                                "properties": {
+                                  "id": {
+                                    "description": "The id of the workorder.",
+                                    "example": "CorpoServo000",
+                                    "type": "string",
+                                  },
+                                },
+                                "required": [
+                                  "id",
+                                ],
+                                "type": "object",
+                              },
+                              "type": "array",
+                            },
+                          },
+                          "required": [
+                            "workorders",
+                          ],
+                          "type": "object",
+                        },
+                      },
+                    },
+                    "description": "200 OK",
+                  },
+                },
+              },
+            },
+          },
+        },
+        "Name": "FinanceAPI",
+      },
+      "Type": "AWS::ApiGateway::RestApi",
+    },
+    "FinanceAPIAccountA09C8324": {
+      "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ExamplelambdaServiceRole2110FDF6",
+        "FinanceAPI24BBA5D4",
+      ],
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "FinanceAPICloudWatchRoleBF59266B",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ApiGateway::Account",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "FinanceAPICloudWatchRoleBF59266B": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "FinanceAPIDeployment6EDA9FBB7f315767bab7524cb64f3558b6621e8f": {
+      "DependsOn": [
+        "FinanceAPIgetWorkordersGET4FFDE2B0",
+        "FinanceAPIgetWorkorders5D703BAB",
+      ],
+      "Properties": {
+        "Description": "Automatically created by the RestApi construct",
+        "RestApiId": {
+          "Ref": "FinanceAPI24BBA5D4",
+        },
+      },
+      "Type": "AWS::ApiGateway::Deployment",
+    },
+    "FinanceAPIDeploymentStageprod417D1B6E": {
+      "DependsOn": [
+        "FinanceAPIAccountA09C8324",
+      ],
+      "Properties": {
+        "DeploymentId": {
+          "Ref": "FinanceAPIDeployment6EDA9FBB7f315767bab7524cb64f3558b6621e8f",
+        },
+        "RestApiId": {
+          "Ref": "FinanceAPI24BBA5D4",
+        },
+        "StageName": "prod",
+      },
+      "Type": "AWS::ApiGateway::Stage",
+    },
+    "FinanceAPIgetWorkorders5D703BAB": {
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "FinanceAPI24BBA5D4",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "getWorkorders",
+        "RestApiId": {
+          "Ref": "FinanceAPI24BBA5D4",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "FinanceAPIgetWorkordersGET4FFDE2B0": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "GET",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "getWorkorderslambda834D3E63",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Ref": "FinanceAPIgetWorkorders5D703BAB",
+        },
+        "RestApiId": {
+          "Ref": "FinanceAPI24BBA5D4",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "FinanceAPIgetWorkordersGETApiPermissionTestinfrastructurestackFinanceAPI2D0D58C0GETgetWorkordersB9634ACF": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "getWorkorderslambda834D3E63",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "FinanceAPI24BBA5D4",
+              },
+              "/test-invoke-stage/GET/getWorkorders",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "FinanceAPIgetWorkordersGETApiPermissioninfrastructurestackFinanceAPI2D0D58C0GETgetWorkorders7C4F639A": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "getWorkorderslambda834D3E63",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "FinanceAPI24BBA5D4",
+              },
+              "/",
+              {
+                "Ref": "FinanceAPIDeploymentStageprod417D1B6E",
+              },
+              "/GET/getWorkorders",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "getWorkorderslambda834D3E63": {
+      "DependsOn": [
+        "getWorkorderslambdaServiceRoleC66B7AEF",
       ],
       "Properties": {
         "Architectures": [
@@ -24,11 +315,11 @@ exports[`InfrastructureStack > should compile 1`] = `
             "status": "test",
           },
         },
-        "FunctionName": "LambdaExample",
+        "FunctionName": "getWorkordersExample",
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
-            "ExamplelambdaServiceRole2110FDF6",
+            "getWorkorderslambdaServiceRoleC66B7AEF",
             "Arn",
           ],
         },
@@ -36,7 +327,7 @@ exports[`InfrastructureStack > should compile 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ExamplelambdaServiceRole2110FDF6": {
+    "getWorkorderslambdaServiceRoleC66B7AEF": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
