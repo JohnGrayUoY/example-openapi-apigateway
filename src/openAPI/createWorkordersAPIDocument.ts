@@ -8,7 +8,7 @@ export const createWorkordersAPIDocument = (
     props: CreateWorkordersAPIDocumentProps
 ): OpenAPIObject => {
     return createDocument({
-        openapi: '3.0.3',
+        openapi: '3.0.3', // APIGateway does NOT support 3.1.x so this must be a 3.0.x version.
         info: {
             title: 'Workorders API',
             version: '0.1.0',
