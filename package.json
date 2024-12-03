@@ -1,7 +1,7 @@
 {
-    "name": "name-here",
+    "name": "example-openapi-apigateway",
     "version": "1.0.0",
-    "description": "Description here",
+    "description": "An example implementation of OpenAPI 3.0.3 being used to deploy an APIGateway instance.",
     "license": "ISC",
     "author": "university-of-york/corporate-services",
     "main": "index.ts",
