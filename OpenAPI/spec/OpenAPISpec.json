@@ -1,0 +1,81 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Workorders API",
+        "version": "0.1.0"
+    },
+    "x-amazon-apigateway-api-key-source": "HEADER",
+    "security": [
+        {
+            "sigv4Reference": []
+        }
+    ],
+    "paths": {
+        "/workorders": {
+            "get": {
+                "description": "Get workorders",
+                "x-amazon-apigateway-auth": {
+                    "type": "NONE"
+                },
+                "x-amazon-apigateway-integration": {
+                    "type": "aws_proxy",
+                    "httpMethod": "POST",
+                    "uri": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:mock-function-name/invocations",
+                    "credentials": "mock-credentials-arn"
+                },
+                "responses": {
+                    "200": {
+                        "description": "200 OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "workorders": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "description": "The id of the workorder.",
+                                                        "example": "CorpoServo000"
+                                                    }
+                                                },
+                                                "required": ["id"]
+                                            }
+                                        }
+                                    },
+                                    "required": ["workorders"]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "sigv4Reference": {
+                "type": "apiKey",
+                "name": "Authorization",
+                "in": "header",
+                "x-amazon-apigateway-authtype": "awsSigv4"
+            }
+        },
+        "x-amazon-apigateway-policy": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "AWS": "*"
+                    },
+                    "Action": "execute-api:Invoke",
+                    "Resource": ["execute-api:/*"]
+                }
+            ]
+        }
+    }
+}

@@ -1,3 +1,4 @@
+import * as fs from 'node:fs';
 import { createWorkordersAPIDocument } from './createWorkordersAPIDocument';
 
 describe('Workorders API Document tests', () => {
@@ -7,6 +8,6 @@ describe('Workorders API Document tests', () => {
             apiRoleArn: 'mock-credentials-arn',
         });
 
-        console.log(JSON.stringify(openAPISpec));
+        fs.writeFileSync('./OpenAPI/spec/WorkordersSpec.json', JSON.stringify(openAPISpec));
     });
 });
