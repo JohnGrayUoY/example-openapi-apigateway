@@ -86,14 +86,6 @@ exports[`InfrastructureStack > should compile 1`] = `
       "Properties": {
         "Body": {
           "components": {
-            "securitySchemes": {
-              "sigv4Reference": {
-                "in": "header",
-                "name": "Authorization",
-                "type": "apiKey",
-                "x-amazon-apigateway-authtype": "awsSigv4",
-              },
-            },
             "x-amazon-apigateway-policy": {
               "Statement": [
                 {
@@ -180,12 +172,6 @@ exports[`InfrastructureStack > should compile 1`] = `
               },
             },
           },
-          "security": [
-            {
-              "sigv4Reference": [],
-            },
-          ],
-          "x-amazon-apigateway-api-key-source": "HEADER",
         },
         "Name": "FinanceAPI",
       },
@@ -240,7 +226,15 @@ exports[`InfrastructureStack > should compile 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "FinanceAPIDeployment6EDA9FBBc052e0a2cedc29f2a5a2e284a83bd2a1": {
+    "FinanceAPIDeployment407C39B8b65a58e0fa9c70fb3141b11df70f8464": {
+      "Properties": {
+        "RestApiId": {
+          "Ref": "FinanceAPI24BBA5D4",
+        },
+      },
+      "Type": "AWS::ApiGateway::Deployment",
+    },
+    "FinanceAPIDeployment6EDA9FBBb65a58e0fa9c70fb3141b11df70f8464": {
       "Properties": {
         "Description": "Automatically created by the RestApi construct",
         "RestApiId": {
@@ -255,7 +249,7 @@ exports[`InfrastructureStack > should compile 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "FinanceAPIDeployment6EDA9FBBc052e0a2cedc29f2a5a2e284a83bd2a1",
+          "Ref": "FinanceAPIDeployment6EDA9FBBb65a58e0fa9c70fb3141b11df70f8464",
         },
         "RestApiId": {
           "Ref": "FinanceAPI24BBA5D4",
@@ -320,6 +314,51 @@ exports[`InfrastructureStack > should compile 1`] = `
         ],
       },
       "Type": "AWS::IAM::Role",
+    },
+    "devstageAD791BF6": {
+      "DependsOn": [
+        "FinanceAPIAccountA09C8324",
+      ],
+      "Properties": {
+        "DeploymentId": {
+          "Ref": "FinanceAPIDeployment407C39B8b65a58e0fa9c70fb3141b11df70f8464",
+        },
+        "RestApiId": {
+          "Ref": "FinanceAPI24BBA5D4",
+        },
+        "StageName": "dev",
+      },
+      "Type": "AWS::ApiGateway::Stage",
+    },
+    "productionstageD3A4C83E": {
+      "DependsOn": [
+        "FinanceAPIAccountA09C8324",
+      ],
+      "Properties": {
+        "DeploymentId": {
+          "Ref": "FinanceAPIDeployment407C39B8b65a58e0fa9c70fb3141b11df70f8464",
+        },
+        "RestApiId": {
+          "Ref": "FinanceAPI24BBA5D4",
+        },
+        "StageName": "production",
+      },
+      "Type": "AWS::ApiGateway::Stage",
+    },
+    "stagingstageBE297314": {
+      "DependsOn": [
+        "FinanceAPIAccountA09C8324",
+      ],
+      "Properties": {
+        "DeploymentId": {
+          "Ref": "FinanceAPIDeployment407C39B8b65a58e0fa9c70fb3141b11df70f8464",
+        },
+        "RestApiId": {
+          "Ref": "FinanceAPI24BBA5D4",
+        },
+        "StageName": "staging",
+      },
+      "Type": "AWS::ApiGateway::Stage",
     },
   },
   "Rules": {

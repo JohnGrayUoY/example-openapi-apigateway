@@ -2,7 +2,7 @@ import { Stack, type StackProps } from 'aws-cdk-lib';
 import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import type { Construct } from 'constructs';
-import { ApiDefinition, SpecRestApi } from 'aws-cdk-lib/aws-apigateway';
+import { ApiDefinition, Deployment, SpecRestApi, Stage } from 'aws-cdk-lib/aws-apigateway';
 import { Effect, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { type Environment } from '../types/parseEnvironment';
 import { createWorkordersAPIDocument } from '../../src/openAPI/createWorkordersAPIDocument';
@@ -40,8 +40,35 @@ export class InfrastructureStack extends Stack {
             apiRoleArn: apiRole.roleArn,
         });
 
-        new SpecRestApi(this, 'FinanceAPI', {
+        const api = new SpecRestApi(this, 'FinanceAPI', {
             apiDefinition: ApiDefinition.fromInline(openAPIDocument),
         });
+
+        const deployment = new Deployment(this, 'FinanceAPIDeployment', { api });
+
+        const [_devStage, _stagingStage, productionStage] = ['dev', 'staging', 'production'].map(
+            (stage) => new Stage(this, `${stage}_stage`, { deployment, stageName: stage })
+        );
+
+        let deploymentStage: Stage;
+
+        switch (env.STATUS) {
+            case 'dev': {
+                deploymentStage = _devStage!;
+                break;
+            }
+
+            case 'staging': {
+                deploymentStage = _stagingStage!;
+                break;
+            }
+
+            default: {
+                deploymentStage = productionStage!;
+                break;
+            }
+        }
+
+        api.deploymentStage = deploymentStage;
     }
 }

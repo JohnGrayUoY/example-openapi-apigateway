@@ -1,22 +1,11 @@
 {
     "openapi": "3.0.3",
-    "info": {
-        "title": "Workorders API",
-        "version": "0.1.0"
-    },
-    "x-amazon-apigateway-api-key-source": "HEADER",
-    "security": [
-        {
-            "sigv4Reference": []
-        }
-    ],
+    "info": { "title": "Workorders API", "version": "0.1.0" },
     "paths": {
         "/workorders": {
             "get": {
                 "description": "Get workorders",
-                "x-amazon-apigateway-auth": {
-                    "type": "NONE"
-                },
+                "x-amazon-apigateway-auth": { "type": "NONE" },
                 "x-amazon-apigateway-integration": {
                     "type": "aws_proxy",
                     "httpMethod": "POST",
@@ -56,22 +45,12 @@
         }
     },
     "components": {
-        "securitySchemes": {
-            "sigv4Reference": {
-                "type": "apiKey",
-                "name": "Authorization",
-                "in": "header",
-                "x-amazon-apigateway-authtype": "awsSigv4"
-            }
-        },
         "x-amazon-apigateway-policy": {
             "Version": "2012-10-17",
             "Statement": [
                 {
                     "Effect": "Allow",
-                    "Principal": {
-                        "AWS": "*"
-                    },
+                    "Principal": { "AWS": "*" },
                     "Action": "execute-api:Invoke",
                     "Resource": ["execute-api:/*"]
                 }

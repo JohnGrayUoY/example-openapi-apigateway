@@ -13,11 +13,6 @@ export const createWorkordersAPIDocument = (
             title: 'Workorders API',
             version: '0.1.0',
         },
-        security: [
-            {
-                sigv4Reference: [],
-            },
-        ],
         paths: {
             '/workorders': {
                 get: {
@@ -47,14 +42,6 @@ export const createWorkordersAPIDocument = (
             },
         },
         components: {
-            securitySchemes: {
-                sigv4Reference: {
-                    type: 'apiKey',
-                    name: 'Authorization',
-                    in: 'header',
-                    'x-amazon-apigateway-authtype': 'awsSigv4',
-                },
-            },
             'x-amazon-apigateway-policy': {
                 Version: '2012-10-17',
                 Statement: [
