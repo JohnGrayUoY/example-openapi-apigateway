@@ -13,7 +13,6 @@ export const createWorkordersAPIDocument = (
             title: 'Workorders API',
             version: '0.1.0',
         },
-        'x-amazon-apigateway-api-key-source': 'HEADER',
         security: [
             {
                 sigv4Reference: [],
